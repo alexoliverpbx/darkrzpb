@@ -1,171 +1,37 @@
+/* === index.html === */
+
 <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Darkrzpb BIN Intelligence Tool</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-      overflow-x: hidden;
-    }#matrix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-}
-
-header {
-  background: rgba(0, 0, 0, 0.8);
-  text-align: center;
-  padding: 20px;
-  font-size: 28px;
-  font-weight: bold;
-  border-bottom: 1px solid #0f0;
-  animation: glow 2s infinite alternate;
-}
-
-@keyframes glow {
-  from { color: #00ff00; }
-  to { color: #00ffff; }
-}
-
-nav {
-  display: flex;
-  justify-content: center;
-  background-color: #111;
-  border-bottom: 1px solid #0f0;
-}
-
-nav a {
-  color: #0f0;
-  text-decoration: none;
-  padding: 15px 20px;
-  font-weight: bold;
-}
-
-section {
-  padding: 20px;
-}
-
-.card {
-  background: #111;
-  padding: 15px;
-  border: 1px solid #0f0;
-  margin: 10px 0;
-  border-radius: 8px;
-}
-
-input, button {
-  background: #000;
-  color: #0f0;
-  border: 1px solid #0f0;
-  padding: 10px;
-  width: 100%;
-  margin: 5px 0;
-}
-
-footer {
-  text-align: center;
-  padding: 10px;
-  border-top: 1px solid #0f0;
-}
-
-  </style>
+  <title>BIN Checker</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="matrix"></canvas>  <header>💀 BIN & Card Intelligence - Made by Darkrzpb</header>  <nav>
-    <a href="#analyzer">BIN Analyzer</a>
-    <a href="#generator">Generator</a>
-    <a href="#logs">Logs</a>
-    <a href="#leaks">Leaks</a>
-    <a href="#contact">Contact</a>
-  </nav>  <section id="analyzer">
-    <div class="card">
-      <h2>BIN Analyzer</h2>
-      <input type="text" id="binInput" placeholder="Enter BIN or full card...">
-      <button onclick="checkBIN()">Analyze</button>
-      <pre id="resultsBox">Waiting...</pre>
-    </div>
-  </section>  <section id="generator">
-    <div class="card">
-      <h2>BIN Generator (2D)</h2>
-      <button onclick="generateBIN()">Generate</button>
-      <div id="genResult"></div>
-    </div>
-  </section>  <section id="logs">
-    <div class="card">
-      <h2>Live Logs</h2>
-      <div id="logBox">No activity yet.</div>
-    </div>
-  </section>  <section id="leaks">
-    <div class="card">
-      <h2>Leaked BINs</h2>
-      <button onclick="fetchDarkBINs()">Fetch Leaks</button>
-      <div id="darknetBox"></div>
-    </div>
-  </section>  <section id="contact">
-    <div class="card">
-      <h2>Contact / Donate</h2>
-      <p>💰 Donate via PayPal: <strong>alicyprusala@gmail.com</strong></p>
-      <p>📢 Telegram: <a href="https://t.me/darkrzpb" target="_blank">@darkrzpb</a></p>
-    </div>
-  </section>  <footer>
-    &copy; 2025 Darkrzpb. All Rights Reserved.
-  </footer>  <script>
-    // Matrix animation
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-    const letters = Array(256).join("0").split("");
-    setInterval(function() {
-      ctx.fillStyle = "rgba(0,0,0,0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#0F0";
-      letters.map((y_pos, index) => {
-        const text = String.fromCharCode(3e4 + Math.random() * 33);
-        const x_pos = index * 10;
-        ctx.fillText(text, x_pos, y_pos);
-        letters[index] = y_pos > 758 + Math.random() * 1e4 ? 0 : y_pos + 10;
-      });
-    }, 33);
+  <div class="container">
+    <h1>BIN Checker</h1>
+    <input type="text" id="binInput" placeholder="Enter BIN (e.g. 457173)">
+    <button onclick="checkBin()">Check</button>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>/* === style.css === */ body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f2f2f2; } .container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; } input { width: 80%; padding: 10px; margin: 10px 0; } button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; } #result { margin-top: 20px; }
 
-    async function checkBIN() {
-      const input = document.getElementById("binInput").value.trim();
-      const bin = input.substring(0,6);
-      const res = await fetch(https://lookup.binlist.net/${bin});
-      const data = await res.json();
-      let info = Country: ${data.country?.name}\nBank: ${data.bank?.name}\nType: ${data.type}\nBrand: ${data.brand}\nPrepaid: ${data.prepaid ? 'Yes' : 'No'}\n;
-      document.getElementById("resultsBox").innerText = info;
-      logBIN(bin);
-    }
+/* === script.js === */ async function checkBin() { const bin = document.getElementById("binInput").value; const resultDiv = document.getElementById("result");
 
-    function generateBIN() {
-      const bins = ["421160", "540441", "434256"];
-      let result = "";
-      for (let i = 0; i < 10; i++) {
-        const prefix = bins[Math.floor(Math.random() * bins.length)];
-        const suffix = Math.floor(100000 + Math.random() * 899999);
-        result += prefix + suffix + "\n";
-      }
-      document.getElementById("genResult").innerText = result;
-    }
+if (bin.length < 6) { resultDiv.innerHTML = "Please enter at least 6 digits."; return; }
 
-    function logBIN(bin) {
-      const time = new Date().toLocaleTimeString();
-      const log = document.getElementById("logBox");
-      log.innerText = [${time}] Checked BIN: ${bin}\n + log.innerText;
-    }
+try { const res = await fetch(https://lookup.binlist.net/${bin}); const data = await res.json();
 
-    function fetchDarkBINs() {
-      const leaked = ["447799*2210", "5310484433", "402400*9831"];
-      document.getElementById("darknetBox").innerText = leaked.join("\n");
-    }
-  </script></body>
-</html>
+resultDiv.innerHTML = `
+  <p><strong>Scheme:</strong> ${data.scheme || "N/A"}</p>
+  <p><strong>Type:</strong> ${data.type || "N/A"}</p>
+  <p><strong>Brand:</strong> ${data.brand || "N/A"}</p>
+  <p><strong>Bank:</strong> ${data.bank?.name || "N/A"}</p>
+  <p><strong>Country:</strong> ${data.country?.name || "N/A"} (${data.country?.emoji || ""})</p>
+`;
+
+} catch (error) { resultDiv.innerHTML = "BIN not found or API error."; } }
+
+/* === vercel.json === */ { "cleanUrls": true, "rewrites": [ { "source": "/", "destination": "/index.html" } ] }
